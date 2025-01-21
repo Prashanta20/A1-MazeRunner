@@ -16,7 +16,7 @@ public class Main {
 
         // create Options object
         Options options = new Options();
-        // add t option
+        // add i option
         options.addOption("i", "flag", false, "load maze");
 
         try {
