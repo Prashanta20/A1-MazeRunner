@@ -14,5 +14,22 @@ public class Maze {
         return grid;
     }
 
+    public void setGrid(Tile[][] grid) {
+        this.grid = grid;
+    }
+
     // Methods
+    public void displayMaze() {
+        // Loop through the 2D grid
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j].isWall()) {
+                    System.out.print("#"); // print "#" for wall
+                } else {
+                    System.out.print(" "); // print " " for pass
+                }
+            }
+            System.out.print(System.lineSeparator());
+        }
+    }
 }

@@ -3,8 +3,10 @@ package ca.mcmaster.se2aa4.mazerunner;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import org.apache.commons.cli.*;
 
 public class Main {
@@ -19,6 +21,12 @@ public class Main {
         // add i option
         options.addOption("i", "flag", false, "load maze");
 
+        // Create Maze object
+        Maze maze = new Maze();
+
+        // Create ArrayList for storing Maze grid
+        ArrayList<Tile[]> gridList = new ArrayList<>();
+
         try {
             // create parser for command line arguments
             CommandLineParser parser = new DefaultParser();
@@ -31,15 +39,32 @@ public class Main {
                 BufferedReader reader = new BufferedReader(new FileReader(args[1]));
                 String line;
                 while ((line = reader.readLine()) != null) {
+                    // Creat a Tile array
+                    Tile[] tiles = new Tile[line.length()];
+
                     for (int idx = 0; idx < line.length(); idx++) {
+                        Tile tile = new Tile(); // create new Tile object
+
                         if (line.charAt(idx) == '#') {
+                            tile.setIsWall(true); // set tile that is wall
                             logger.debug("WALL ");
                         } else if (line.charAt(idx) == ' ') {
                             logger.debug("PASS ");
+                            tile.setIsWall(false); // set tile that is pass
                         }
+
+                        tiles[idx] = tile;
                     }
+                    gridList.add(tiles); // Add the row of tiles into the grid
                     logger.debug(System.lineSeparator());
                 }
+
+                // Convert ArrayList to a 2D array for easy access
+                Tile[][] grid = gridList.toArray(new Tile[gridList.size()][]);
+                // Set as grid in maze object
+                maze.setGrid(grid);
+
+                maze.displayMaze();
             } else {
                 // it does not have the -i flag
                 throw new Exception("No Maze Detected");
