@@ -1,10 +1,13 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
+import java.util.ArrayList;
+
 public class Player {
     // Attributes
     private int position_x;
     private int position_y;
     private char direction = 'E'; // Start with direction always facing East
+    private ArrayList<Character> path;
 
     // Contructor
     public Player(int position_x, int position_y) {
@@ -37,6 +40,14 @@ public class Player {
         this.direction = direction;
     }
 
+    public ArrayList<Character> getPath() {
+        return path;
+    }
+
+    public void setPath(ArrayList<Character> path) {
+        this.path = path;
+    }
+
     // Methods
 
     public void moveForward() {
@@ -55,14 +66,22 @@ public class Player {
         } else {
             // Error no movement
         }
+        path.add('F');
 
     }
 
     public void turnRight() {
-
+        path.add('R');
     }
 
     public void turnLeft() {
-
+        path.add('L');
     }
+
+    public void displayCanPath() {
+        for (char move : path) {
+            System.out.print(move);
+        }
+    }
+
 }
