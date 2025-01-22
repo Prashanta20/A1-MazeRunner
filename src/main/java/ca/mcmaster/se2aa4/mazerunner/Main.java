@@ -21,9 +21,6 @@ public class Main {
         // add i option
         options.addOption("i", "flag", false, "load maze");
 
-        // Create Maze object
-        Maze maze = new Maze();
-
         // Create ArrayList for storing Maze grid
         ArrayList<Tile[]> gridList = new ArrayList<>();
 
@@ -61,10 +58,12 @@ public class Main {
 
                 // Convert ArrayList to a 2D array for easy access
                 Tile[][] grid = gridList.toArray(new Tile[gridList.size()][]);
-                // Set as grid in maze object
-                maze.setGrid(grid);
+
+                // Create Maze object
+                Maze maze = new Maze(grid); // Set as grid in maze object
 
                 maze.displayMaze();
+                maze.traverseMaze();
             } else {
                 // it does not have the -i flag
                 throw new Exception("No Maze Detected");

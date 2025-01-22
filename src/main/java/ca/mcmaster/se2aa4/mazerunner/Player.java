@@ -7,7 +7,7 @@ public class Player {
     private int position_x;
     private int position_y;
     private char direction = 'E'; // Start with direction always facing East
-    private ArrayList<Character> path;
+    private ArrayList<Character> path = new ArrayList<>();
 
     // Contructor
     public Player(int position_x, int position_y) {
@@ -53,13 +53,13 @@ public class Player {
     public void moveForward() {
         if (direction == 'N') {
             // Facing North
-            position_y++; // increase y by one
+            position_y--; // increase y by one
         } else if (direction == 'E') {
             // Facing East
             position_x++;
         } else if (direction == 'S') {
             // Facing South
-            position_y--;
+            position_y++;
         } else if (direction == 'W') {
             // Facing West
             position_x--;
@@ -67,7 +67,6 @@ public class Player {
             // Error no movement
         }
         path.add('F');
-
     }
 
     public void turnRight() {
@@ -79,9 +78,19 @@ public class Player {
     }
 
     public void displayCanPath() {
-        for (char move : path) {
-            System.out.print(move);
+        System.out.println("Path: ");
+        if (path == null) {
+            return;
         }
+        for (char move : path) {
+            System.out.print("" + move);
+        }
+        System.out.println();
+    }
+
+    public void rightHandRule() {
+        // For now a simple move forward only for straight maze
+        moveForward();
     }
 
 }
