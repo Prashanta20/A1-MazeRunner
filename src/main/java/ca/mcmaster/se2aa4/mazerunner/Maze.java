@@ -32,4 +32,20 @@ public class Maze {
             System.out.print(System.lineSeparator());
         }
     }
+
+    public boolean isEnd(int x, int y) {
+        try {
+
+            // Try and index into the left and right postions next to player
+            // if it is out of bounds, then player is at the start or end tile
+            Tile tile_Left = grid[x - 1][y];
+            Tile tile_Right = grid[x + 1][y];
+
+            // if we get value for both tiles, we are somewhere not in the middle of board
+            return false;
+        } catch (IndexOutOfBoundsException e) {
+            // Error
+            return true;
+        }
+    }
 }
