@@ -4,9 +4,13 @@ public class Maze {
     // Attributes
     private Tile[][] grid;
 
+    private int[] endLeft;
+    private int[] endRight;
+
     // Contructor
     public Maze() {
-
+        this.endLeft = new int[2];
+        this.endRight = new int[2];
     }
 
     // Getters and Setters
@@ -46,6 +50,29 @@ public class Maze {
         } catch (IndexOutOfBoundsException e) {
             // Error
             return true;
+        }
+    }
+
+    private void findEndLeft() {
+        // Loop through the left column of the grid
+        for (int i = 0; i < grid.length; i++) {
+            // loop through the left column
+            if (isEnd(0, i)) {
+                endLeft[0] = 0;
+                endLeft[1] = i;
+            }
+        }
+    }
+
+    private void findEndRight() {
+        // Loop through the left column of the grid
+        int len = grid[0].length; // length of column
+        for (int i = 0; i < grid.length; i++) {
+            // loop through the left column
+            if (isEnd(len - 1, i)) {
+                endRight[0] = len - 1;
+                endRight[1] = i;
+            }
         }
     }
 }
