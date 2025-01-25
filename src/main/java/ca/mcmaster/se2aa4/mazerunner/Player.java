@@ -77,10 +77,40 @@ public class Player {
     }
 
     public void turnRight() {
+        if (direction == Direction.NORTH) {
+            // Facing North
+            direction = Direction.EAST; // turn to EAST
+        } else if (direction == Direction.EAST) {
+            // Facing East
+            direction = Direction.SOUTH; // turn to SOUTH
+        } else if (direction == Direction.SOUTH) {
+            // Facing South
+            direction = Direction.WEST; // turn to WEST
+        } else if (direction == Direction.WEST) {
+            // Facing West
+            direction = Direction.NORTH; // turn to NORTH
+        } else {
+            // Error no movement
+        }
         path.add('R');
     }
 
     public void turnLeft() {
+        if (direction == Direction.NORTH) {
+            // Facing North
+            direction = Direction.WEST; // turn to WEST
+        } else if (direction == Direction.EAST) {
+            // Facing East
+            direction = Direction.NORTH; // turn to NORTH
+        } else if (direction == Direction.SOUTH) {
+            // Facing South
+            direction = Direction.EAST; // turn to EAST
+        } else if (direction == Direction.WEST) {
+            // Facing West
+            direction = Direction.SOUTH; // turn to SOUTH
+        } else {
+            // Error no movement
+        }
         path.add('L');
     }
 
