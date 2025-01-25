@@ -44,7 +44,12 @@ public class Main {
                 Maze maze = new Maze(grid); // Set as grid in maze object
 
                 maze.displayMaze(); // display maze
-                maze.traverseMaze(); // find path for maze
+
+                if (commandLine.hasOption("p")) { // if it has the -p flag, validate path
+                    maze.validPath(args[3]); // check valid path
+                } else { // Does not have -p flag, find path
+                    maze.traverseMaze(); // find path for maze
+                }
 
             } else {
                 // it does not have the -i flag

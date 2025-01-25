@@ -84,4 +84,9 @@ public class Maze {
         // For now display canonical path
         player.displayCanPath();
     }
+
+    public void validPath(String givenPath) {
+        // TODO
+
+    }
 }
