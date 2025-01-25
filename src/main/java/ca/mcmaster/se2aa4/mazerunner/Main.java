@@ -16,84 +16,84 @@ public class Main {
     public static void main(String[] args) {
         logger.info("** Starting Maze Runner");
 
-        // create Options object
+        // Create Options object
         Options options = new Options();
 
-        // add i option
-        options.addOption("i", "flag", false, "load maze");
+        // Add -i option
+        options.addOption("i", "input", true, "load maze (requires file path)");
 
-        // add p option
-        options.addOption("p", "flag", false, "verify path");
+        // Add -p option
+        options.addOption("p", "path", true, "verify path (requires path string)");
 
         // Create ArrayList for storing Maze grid
         ArrayList<Tile[]> gridList = new ArrayList<>();
 
         try {
-
-            // create parser for command line arguments
+            // Create parser for command-line arguments
             CommandLineParser parser = new DefaultParser();
             CommandLine commandLine = parser.parse(options, args);
 
-            if (commandLine.hasOption("i")) { // if it has the -i flag
-
-                readMaze(gridList, args); // read in from file
-
-                // Convert ArrayList to a 2D array for easy access
-                Tile[][] grid = gridList.toArray(new Tile[gridList.size()][]);
-                // Create Maze object
-                Maze maze = new Maze(grid); // Set as grid in maze object
-
-                maze.displayMaze(); // display maze
-
-                if (commandLine.hasOption("p")) { // if it has the -p flag, validate path
-                    maze.validPath(args[3]); // check valid path
-                } else { // Does not have -p flag, find path
-                    maze.traverseMaze(); // find path for maze
-                }
-
-            } else {
-                // it does not have the -i flag
-                throw new Exception("No Maze Detected");
+            // Ensure that the required `-i` flag is provided
+            if (!commandLine.hasOption("i")) {
+                throw new Exception("Missing required -i flag for input file");
             }
 
+            // Read the maze from the input file specified by the `-i` flag
+            String mazeFilePath = commandLine.getOptionValue("i");
+            readMaze(gridList, mazeFilePath);
+
+            // Convert ArrayList to a 2D array for easy access
+            Tile[][] grid = gridList.toArray(new Tile[gridList.size()][]);
+
+            // Create Maze object
+            Maze maze = new Maze(grid);
+            maze.displayMaze(); // Display maze
+
+            // Check if the `-p` flag is provided and handle accordingly
+            if (commandLine.hasOption("p")) {
+                String path = commandLine.getOptionValue("p");
+                maze.validPath(path); // Validate the provided path
+            } else {
+                maze.traverseMaze(); // Find a path in the maze
+            }
+
+        } catch (ParseException e) {
+            logger.error("Failed to parse command-line arguments: " + e.getMessage());
         } catch (Exception e) {
-            logger.error("/!\\ An error has occured /!\\");
+            logger.error("/!\\ An error has occurred: " + e.getMessage());
         }
 
-        // Compute path
         logger.trace("**** Computing path");
-        logger.error("PATH NOT COMPUTED");
         logger.info("** End of MazeRunner");
     }
 
-    private static void readMaze(ArrayList<Tile[]> gridList, String[] args) {
+    private static void readMaze(ArrayList<Tile[]> gridList, String mazeFilePath) {
         try {
-            logger.trace("**** Reading the maze from file " + args[1]);
-            BufferedReader reader = new BufferedReader(new FileReader(args[1]));
+            logger.trace("**** Reading the maze from file: " + mazeFilePath);
+            BufferedReader reader = new BufferedReader(new FileReader(mazeFilePath));
             String line;
+
             while ((line = reader.readLine()) != null) {
-                // Creat a Tile array
                 Tile[] tiles = new Tile[line.length()];
 
                 for (int idx = 0; idx < line.length(); idx++) {
-                    Tile tile = new Tile(); // create new Tile object
+                    Tile tile = new Tile();
 
                     if (line.charAt(idx) == '#') {
-                        tile.setIsWall(true); // set tile that is wall
+                        tile.setIsWall(true);
                         logger.debug("WALL ");
                     } else if (line.charAt(idx) == ' ') {
+                        tile.setIsWall(false);
                         logger.debug("PASS ");
-                        tile.setIsWall(false); // set tile that is pass
                     }
 
                     tiles[idx] = tile;
                 }
-                gridList.add(tiles); // Add the row of tiles into the grid
+                gridList.add(tiles);
                 logger.debug(System.lineSeparator());
             }
         } catch (Exception e) {
-            logger.error("/!\\ An error has occured /!\\");
+            logger.error("/!\\ An error has occurred while reading the maze: " + e.getMessage());
         }
-
     }
 }
