@@ -81,8 +81,8 @@ public class Maze {
             player.rightHandRule();
         }
 
-        // For now display canonical path
-        player.displayCanPath();
+        // display the factorized path
+        player.factorizedPath();
     }
 
     public void validPath(String givenPath) {
