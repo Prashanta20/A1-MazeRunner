@@ -89,8 +89,72 @@ public class Maze {
     }
 
     public void validPath(String givenPath) {
-        // TODO
+        // check if the path works for at least one of the ends
+        if (startingEast(givenPath) || startingWest(givenPath)) {
+            System.out.println("The path: " + givenPath + " is a valid path");
+        } else {
+            System.out.println("The path: " + givenPath + " is NOT a valid path");
+        }
 
+    }
+
+    // Helper Methods
+
+    private boolean startingWest(String givenPath) {
+        Player player = new Player(endLeft[1], endLeft[0]); // set player starting position to Left end
+
+        // Traverse the path
+        for (int i = 0; i < givenPath.length(); i++) {
+            char move = givenPath.charAt(i);
+
+            // move the palyer according ot the given path
+            if (move == 'F') {
+                player.moveForward();
+            } else if (move == 'R') {
+                player.turnRight();
+            } else if (move == 'L') {
+                player.turnLeft();
+            } else {
+                // not a valid move
+                return false;
+            }
+        }
+
+        // after the last moves, check if player is at left WEST end
+        if (player.getX() == endRight[1] && player.getY() == endRight[0]) {
+            return true; // player reached other end
+        } else {
+            return false; // player is not at other end
+        }
+    }
+
+    private boolean startingEast(String givenPath) {
+        Player player = new Player(endRight[1], endRight[0]); // set player starting position to Right end
+        player.setDirection(Direction.WEST); // set starting postiont to WEST
+
+        // Traverse the path
+        for (int i = 0; i < givenPath.length(); i++) {
+            char move = givenPath.charAt(i);
+
+            // move the palyer according ot the given path
+            if (move == 'F') {
+                player.moveForward();
+            } else if (move == 'R') {
+                player.turnRight();
+            } else if (move == 'L') {
+                player.turnLeft();
+            } else {
+                // not a valid move
+                return false;
+            }
+        }
+
+        // after the last moves, check if player is at left WEST end
+        if (player.getX() == endLeft[1] && player.getY() == endLeft[0]) {
+            return true; // player reached other end
+        } else {
+            return false; // player is not at other end
+        }
     }
 
     private HashMap<Direction, Tile> adjacentTiles(int row, int col) {

@@ -168,9 +168,9 @@ public class Player {
         Tile rightTile = rightTile(options);
         Tile forwardTile = forwardTile(options);
 
-        if (rightTile(options).isWall()) {
+        if (rightTile.isWall()) {
             // Right tile is a wall
-            if (forwardTile(options).isWall()) {
+            if (forwardTile.isWall()) {
                 // forward is also wall (3)
                 turnLeft();
 
