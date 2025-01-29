@@ -11,6 +11,7 @@ import org.apache.commons.cli.*;
 
 public class Main {
 
+    private static Maze maze;
     private static final Logger logger = LogManager.getLogger();
 
     public static void main(String[] args) {
@@ -45,9 +46,15 @@ public class Main {
             // Convert ArrayList to a 2D array for easy access
             Tile[][] grid = gridList.toArray(new Tile[gridList.size()][]);
 
+            // Create Player to traverse maze
+            Player player = new Player(); // can create different players to add more advanced algorthims
+
             // Create Maze object
-            Maze maze = new Maze(grid);
-            maze.displayMaze(); // Display maze
+            maze = new Maze(grid, player);
+
+            // ***** DISPLAY MAZE OPTIONAL ***** //
+            // maze.displayMaze(); // Display maze
+            // ***** DISPLAY MAZE OPTIONAL ***** //
 
             // Check if the `-p` flag is provided and handle accordingly
             if (commandLine.hasOption("p")) {
@@ -63,10 +70,12 @@ public class Main {
             logger.error("/!\\ An error has occurred: " + e.getMessage());
         }
 
-        logger.trace("**** Computing path");
         logger.info("** End of MazeRunner");
     }
 
+    // Helper method
+
+    // Read maze from file
     private static void readMaze(ArrayList<Tile[]> gridList, String mazeFilePath) {
         try {
             logger.trace("**** Reading the maze from file: " + mazeFilePath);

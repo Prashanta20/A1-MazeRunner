@@ -9,7 +9,23 @@ public class Maze {
     private int[] endLeft;
     private int[] endRight;
 
+    private Player mazePlayer;
+
     // Contructor
+    public Maze(Tile[][] grid, Player mazePlayer) {
+        this.grid = grid; // set grid
+        this.endLeft = new int[2];
+        this.endRight = new int[2];
+
+        // Find left and right endpoints
+        findEndLeft(); // Make sure both ends are found
+        findEndRight();
+        this.mazePlayer = mazePlayer; // set Player
+        // set postion of player
+        mazePlayer.setX(endLeft[1]);
+        mazePlayer.setY(endLeft[0]);
+    }
+
     public Maze(Tile[][] grid) {
         this.grid = grid; // set grid
         this.endLeft = new int[2];
@@ -18,6 +34,7 @@ public class Maze {
         // Find left and right endpoints
         findEndLeft(); // Make sure both ends are found
         findEndRight();
+        mazePlayer = new Player(endLeft[1], endLeft[0]); // set player if one is not passed
     }
 
     // Getters and Setters
@@ -29,7 +46,17 @@ public class Maze {
         this.grid = grid;
     }
 
+    public Player getPlayer() {
+        return mazePlayer;
+    }
+
+    public void setPlayer(Player mazePlayer) {
+        this.mazePlayer = mazePlayer;
+    }
+
     // Methods
+
+    // diplay the maze for human chekcks
     public void displayMaze() {
         // Loop through the 2D grid
         for (int i = 0; i < grid.length; i++) {
@@ -44,6 +71,7 @@ public class Maze {
         }
     }
 
+    // determine if given row col is end tile
     public boolean isEnd(int row, int col) {
         if (col == 0 || col == grid[0].length - 1) { // check if we are at left or right most bound
             return !grid[row][col].isWall();
@@ -52,6 +80,7 @@ public class Maze {
         return false; // not at an end postion
     }
 
+    // get the left end tile
     private void findEndLeft() {
         // Loop through the left column of the grid
         for (int i = 0; i < grid.length; i++) { // Iterate over columns
@@ -63,6 +92,7 @@ public class Maze {
         }
     }
 
+    // get the right end tile
     private void findEndRight() {
         // Loop through the right column of the grid
         int len = grid[0].length; // Number of rows
@@ -75,19 +105,20 @@ public class Maze {
         }
     }
 
+    // loop through and find path for maze
     public void traverseMaze() {
-        Player player = new Player(endLeft[1], endLeft[0]); // set player starting position to Left end
 
         // Loop while the player is not at the right end
-        while ((player.getX() != endRight[1]) || (player.getY() != endRight[0])) {
+        while ((mazePlayer.getX() != endRight[1]) || (mazePlayer.getY() != endRight[0])) {
             // pass the adjancent tiles and let player make move decision
-            player.rightHandRule(adjacentTiles(player.getY(), player.getX()));
+            mazePlayer.exploreMaze(adjacentTiles(mazePlayer.getY(), mazePlayer.getX()));
         }
 
         // display the factorized path
-        player.factorizedPath();
+        mazePlayer.factorizedPath();
     }
 
+    // check if given path is valid
     public void validPath(String givenPath) {
         // check if the path works for at least one of the ends
         if (startingEast(givenPath) || startingWest(givenPath)) {
@@ -100,6 +131,7 @@ public class Maze {
 
     // Helper Methods
 
+    // check path starting at west end
     private boolean startingWest(String givenPath) {
         Player player = new Player(endLeft[1], endLeft[0]); // set player starting position to Left end
 
@@ -128,6 +160,7 @@ public class Maze {
         }
     }
 
+    // check path starting at east end
     private boolean startingEast(String givenPath) {
         Player player = new Player(endRight[1], endRight[0]); // set player starting position to Right end
         player.setDirection(Direction.WEST); // set starting postiont to WEST
@@ -157,6 +190,7 @@ public class Maze {
         }
     }
 
+    // get the adjancet tiles of the player
     private HashMap<Direction, Tile> adjacentTiles(int row, int col) {
         HashMap<Direction, Tile> options = new HashMap<>();
         // get the NORTH, EAST, SOUTH, WEST tiles

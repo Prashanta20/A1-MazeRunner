@@ -18,6 +18,11 @@ public class Player {
     private ArrayList<Character> path = new ArrayList<>();
 
     // Contructor
+    public Player() {
+        this.position_x = -1;
+        this.position_y = -1;
+    }
+
     public Player(int position_x, int position_y) {
         this.position_x = position_x;
         this.position_y = position_y;
@@ -46,14 +51,6 @@ public class Player {
 
     public void setDirection(Direction direction) {
         this.direction = direction;
-    }
-
-    public ArrayList<Character> getPath() {
-        return path;
-    }
-
-    public void setPath(ArrayList<Character> path) {
-        this.path = path;
     }
 
     // Methods
@@ -115,16 +112,18 @@ public class Player {
         path.add('L');
     }
 
-    public void displayCanPath() {
-        System.out.print("Path: ");
-        if (path == null) {
-            return;
-        }
-        for (char move : path) {
-            System.out.print("" + move);
-        }
-        System.out.println();
-    }
+    /*
+     * public void displayCanPath() {
+     * System.out.print("Path: ");
+     * if (path == null) {
+     * return;
+     * }
+     * for (char move : path) {
+     * System.out.print("" + move);
+     * }
+     * System.out.println();
+     * }
+     */
 
     public void factorizedPath() {
         if (path.isEmpty()) {
@@ -160,7 +159,7 @@ public class Player {
         System.out.println("Path: " + factorizedPath.toString()); // print the factorized path
     }
 
-    public void rightHandRule(HashMap<Direction, Tile> options) {
+    public void exploreMaze(HashMap<Direction, Tile> options) {
         // 3 conditions to move
         // 1. Right hand wall, Forward pass: move forward
         // 2. Right hand not wall: turn right
