@@ -1,6 +1,7 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 enum Direction {
     NORTH,
@@ -159,9 +160,64 @@ public class Player {
         System.out.println("Path: " + factorizedPath.toString()); // print the factorized path
     }
 
-    public void rightHandRule() {
-        // For now a simple move forward only for straight maze
-        moveForward();
+    public void rightHandRule(HashMap<Direction, Tile> options) {
+        // 3 conditions to move
+        // 1. Right hand wall, Forward pass: move forward
+        // 2. Right hand not wall: turn right
+        // 3. Right hand wall, Forward wall: turn left
+        Tile rightTile = rightTile(options);
+        Tile forwardTile = forwardTile(options);
+
+        if (rightTile(options).isWall()) {
+            // Right tile is a wall
+            if (forwardTile(options).isWall()) {
+                // forward is also wall (3)
+                turnLeft();
+
+            } else {
+                // forward is a pass (1)
+                moveForward();
+
+            }
+
+        } else {
+            // right hand is not a wall (2)
+            turnRight();
+            moveForward();
+
+        }
+
+    }
+
+    private Tile forwardTile(HashMap<Direction, Tile> options) {
+        // return the forward tile for the player
+        if (options.containsKey(direction)) {
+            return options.get(direction);
+        } else {
+            return null;
+        }
+    }
+
+    private Tile rightTile(HashMap<Direction, Tile> options) {
+        Tile rightTile = new Tile();
+        if (direction == Direction.NORTH) {
+            // Facing North
+            rightTile = options.get(Direction.EAST); // EAST tile
+        } else if (direction == Direction.EAST) {
+            // Facing East
+            rightTile = options.get(Direction.SOUTH); // SOUTH tile
+        } else if (direction == Direction.SOUTH) {
+            // Facing South
+            rightTile = options.get(Direction.WEST); // WEST tile
+        } else if (direction == Direction.WEST) {
+            // Facing West
+            rightTile = options.get(Direction.NORTH); // NORTH tile
+        } else {
+            // Error no movement
+            rightTile = null; // no tile
+        }
+
+        return rightTile;
     }
 
 }

@@ -1,5 +1,7 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
+import java.util.HashMap;
+
 public class Maze {
     // Attributes
     private Tile[][] grid;
@@ -78,7 +80,8 @@ public class Maze {
 
         // Loop while the player is not at the right end
         while ((player.getX() != endRight[1]) || (player.getY() != endRight[0])) {
-            player.rightHandRule();
+            // pass the adjancent tiles and let player make move decision
+            player.rightHandRule(adjacentTiles(player.getY(), player.getX()));
         }
 
         // display the factorized path
@@ -87,6 +90,31 @@ public class Maze {
 
     public void validPath(String givenPath) {
         // TODO
+
+    }
+
+    private HashMap<Direction, Tile> adjacentTiles(int row, int col) {
+        HashMap<Direction, Tile> options = new HashMap<>();
+        // get the NORTH, EAST, SOUTH, WEST tiles
+
+        // NORTH
+        if (row > 0) {
+            options.put(Direction.NORTH, grid[row - 1][col]);
+        }
+        // EAST
+        if (col < grid[0].length - 1) {
+            options.put(Direction.EAST, grid[row][col + 1]);
+        }
+        // SOUTH
+        if (row < grid.length - 1) {
+            options.put(Direction.SOUTH, grid[row + 1][col]);
+        }
+        // WEST
+        if (col > 0) {
+            options.put(Direction.WEST, grid[row][col - 1]);
+        }
+
+        return options; // Only returns valid tiles
 
     }
 }
