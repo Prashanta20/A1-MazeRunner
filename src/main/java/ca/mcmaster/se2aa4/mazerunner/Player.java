@@ -10,12 +10,12 @@ enum Direction {
     WEST
 }
 
-public class Player {
+public abstract class Player {
     // Attributes
-    private int position_x;
-    private int position_y;
-    private Direction direction = Direction.EAST; // Start with direction always facing East
-    private ArrayList<Character> path = new ArrayList<>();
+    protected int position_x;
+    protected int position_y;
+    protected Direction direction = Direction.EAST; // Start with direction always facing East
+    protected ArrayList<Character> path = new ArrayList<>();
 
     // Contructor
     public Player() {
@@ -112,19 +112,6 @@ public class Player {
         path.add('L');
     }
 
-    /*
-     * public void displayCanPath() {
-     * System.out.print("Path: ");
-     * if (path == null) {
-     * return;
-     * }
-     * for (char move : path) {
-     * System.out.print("" + move);
-     * }
-     * System.out.println();
-     * }
-     */
-
     public void factorizedPath() {
         if (path.isEmpty()) {
             return; // no path
@@ -159,36 +146,10 @@ public class Player {
         System.out.println("Path: " + factorizedPath.toString()); // print the factorized path
     }
 
-    public void exploreMaze(HashMap<Direction, Tile> options) {
-        // 3 conditions to move
-        // 1. Right hand wall, Forward pass: move forward
-        // 2. Right hand not wall: turn right
-        // 3. Right hand wall, Forward wall: turn left
-        Tile rightTile = rightTile(options);
-        Tile forwardTile = forwardTile(options);
+    // Explore maze different based on type of player
+    public abstract void exploreMaze(HashMap<Direction, Tile> options);
 
-        if (rightTile.isWall()) {
-            // Right tile is a wall
-            if (forwardTile.isWall()) {
-                // forward is also wall (3)
-                turnLeft();
-
-            } else {
-                // forward is a pass (1)
-                moveForward();
-
-            }
-
-        } else {
-            // right hand is not a wall (2)
-            turnRight();
-            moveForward();
-
-        }
-
-    }
-
-    private Tile forwardTile(HashMap<Direction, Tile> options) {
+    protected Tile forwardTile(HashMap<Direction, Tile> options) {
         // return the forward tile for the player
         if (options.containsKey(direction)) {
             return options.get(direction);
@@ -197,7 +158,7 @@ public class Player {
         }
     }
 
-    private Tile rightTile(HashMap<Direction, Tile> options) {
+    protected Tile rightTile(HashMap<Direction, Tile> options) {
         Tile rightTile = new Tile();
         if (direction == Direction.NORTH) {
             // Facing North

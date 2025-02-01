@@ -47,7 +47,7 @@ public class Main {
             Tile[][] grid = gridList.toArray(new Tile[gridList.size()][]);
 
             // Create Player to traverse maze
-            Player player = new Player(); // can create different players to add more advanced algorthims
+            Player player = new RHRPlayer(); // can create different players to add more advanced algorthims
 
             // Create Maze object
             maze = new Maze(grid, player);

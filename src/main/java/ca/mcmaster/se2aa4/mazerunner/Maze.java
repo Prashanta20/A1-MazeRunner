@@ -34,7 +34,7 @@ public class Maze {
         // Find left and right endpoints
         findEndLeft(); // Make sure both ends are found
         findEndRight();
-        mazePlayer = new Player(endLeft[1], endLeft[0]); // set player if one is not passed
+        mazePlayer = new RHRPlayer(endLeft[1], endLeft[0]); // set player if one is not passed
     }
 
     // Getters and Setters
@@ -133,7 +133,7 @@ public class Maze {
 
     // check path starting at west end
     private boolean startingWest(String givenPath) {
-        Player player = new Player(endLeft[1], endLeft[0]); // set player starting position to Left end
+        Player player = new RHRPlayer(endLeft[1], endLeft[0]); // set player starting position to Left end
 
         // Traverse the path
         for (int i = 0; i < givenPath.length(); i++) {
@@ -162,7 +162,7 @@ public class Maze {
 
     // check path starting at east end
     private boolean startingEast(String givenPath) {
-        Player player = new Player(endRight[1], endRight[0]); // set player starting position to Right end
+        Player player = new RHRPlayer(endRight[1], endRight[0]); // set player starting position to Right end
         player.setDirection(Direction.WEST); // set starting postiont to WEST
 
         // Traverse the path
