@@ -2,6 +2,8 @@ package ca.mcmaster.se2aa4.mazerunner;
 
 import java.util.HashMap;
 
+import ca.mcmaster.se2aa4.mazerunner.RHRPlayer;
+
 public class Maze {
     // Attributes
     private Tile[][] grid;
@@ -120,8 +122,9 @@ public class Maze {
 
     // check if given path is valid
     public void validPath(String givenPath) {
+        String canPath = factorizedToCanonical(givenPath);
         // check if the path works for at least one of the ends
-        if (startingEast(givenPath) || startingWest(givenPath)) {
+        if (startingEast(canPath) || startingWest(canPath)) {
             System.out.println("The path: " + givenPath + " is a valid path");
         } else {
             System.out.println("The path: " + givenPath + " is NOT a valid path");
@@ -130,6 +133,39 @@ public class Maze {
     }
 
     // Helper Methods
+
+    private String factorizedToCanonical(String givenPath) {
+
+        if (givenPath.matches(".*\\d.*")) {
+            // there are numbers in the string, it is in factorized form
+            StringBuilder canPath = new StringBuilder(); // start new string
+
+            try {
+                for (int i = 0; i < givenPath.length(); i++) {
+                    if (String.valueOf(givenPath.charAt(i)).matches("\\d")) {
+                        // it is a number
+
+                        for (int j = 0; j < Integer.parseInt(String.valueOf(givenPath.charAt(i))); j++) {
+                            // add that many of the next character
+                            canPath.append("" + givenPath.charAt(i + 1));
+                        }
+                        i++; // go to the next letter
+                    } else {
+                        // it has no number
+                        canPath.append("" + givenPath.charAt(i));
+                    }
+                }
+            } catch (IndexOutOfBoundsException e) {
+                return givenPath; // return the original path
+            }
+
+            return canPath.toString();
+
+        } else {
+            // there are no numbers in the string, it is in canonical form
+            return givenPath;
+        }
+    }
 
     // check path starting at west end
     private boolean startingWest(String givenPath) {
