@@ -2,6 +2,7 @@ package ca.mcmaster.se2aa4.mazerunner;
 
 import java.util.HashMap;
 
+import ca.mcmaster.se2aa4.mazerunner.PathChecker;
 import ca.mcmaster.se2aa4.mazerunner.RHRPlayer;
 
 public class Maze {
@@ -122,9 +123,9 @@ public class Maze {
 
     // check if given path is valid
     public void validPath(String givenPath) {
-        String canPath = factorizedToCanonical(givenPath);
+        PathChecker pathChecker = new PathChecker(givenPath, endLeft, endRight);
         // check if the path works for at least one of the ends
-        if (startingEast(canPath) || startingWest(canPath)) {
+        if (pathChecker.isValidPath()) {
             System.out.println("The path: " + givenPath + " is a valid path");
         } else {
             System.out.println("The path: " + givenPath + " is NOT a valid path");
@@ -133,98 +134,6 @@ public class Maze {
     }
 
     // Helper Methods
-
-    private String factorizedToCanonical(String givenPath) {
-
-        if (givenPath.matches(".*\\d.*")) {
-            // there are numbers in the string, it is in factorized form
-            StringBuilder canPath = new StringBuilder(); // start new string
-
-            try {
-                for (int i = 0; i < givenPath.length(); i++) {
-                    if (String.valueOf(givenPath.charAt(i)).matches("\\d")) {
-                        // it is a number
-
-                        for (int j = 0; j < Integer.parseInt(String.valueOf(givenPath.charAt(i))); j++) {
-                            // add that many of the next character
-                            canPath.append("" + givenPath.charAt(i + 1));
-                        }
-                        i++; // go to the next letter
-                    } else {
-                        // it has no number
-                        canPath.append("" + givenPath.charAt(i));
-                    }
-                }
-            } catch (IndexOutOfBoundsException e) {
-                return givenPath; // return the original path
-            }
-
-            return canPath.toString();
-
-        } else {
-            // there are no numbers in the string, it is in canonical form
-            return givenPath;
-        }
-    }
-
-    // check path starting at west end
-    private boolean startingWest(String givenPath) {
-        Player player = new RHRPlayer(endLeft[1], endLeft[0]); // set player starting position to Left end
-
-        // Traverse the path
-        for (int i = 0; i < givenPath.length(); i++) {
-            char move = givenPath.charAt(i);
-
-            // move the palyer according ot the given path
-            if (move == 'F') {
-                player.moveForward();
-            } else if (move == 'R') {
-                player.turnRight();
-            } else if (move == 'L') {
-                player.turnLeft();
-            } else {
-                // not a valid move
-                return false;
-            }
-        }
-
-        // after the last moves, check if player is at left WEST end
-        if (player.getX() == endRight[1] && player.getY() == endRight[0]) {
-            return true; // player reached other end
-        } else {
-            return false; // player is not at other end
-        }
-    }
-
-    // check path starting at east end
-    private boolean startingEast(String givenPath) {
-        Player player = new RHRPlayer(endRight[1], endRight[0]); // set player starting position to Right end
-        player.setDirection(Direction.WEST); // set starting postiont to WEST
-
-        // Traverse the path
-        for (int i = 0; i < givenPath.length(); i++) {
-            char move = givenPath.charAt(i);
-
-            // move the palyer according ot the given path
-            if (move == 'F') {
-                player.moveForward();
-            } else if (move == 'R') {
-                player.turnRight();
-            } else if (move == 'L') {
-                player.turnLeft();
-            } else {
-                // not a valid move
-                return false;
-            }
-        }
-
-        // after the last moves, check if player is at left WEST end
-        if (player.getX() == endLeft[1] && player.getY() == endLeft[0]) {
-            return true; // player reached other end
-        } else {
-            return false; // player is not at other end
-        }
-    }
 
     // get the adjancet tiles of the player
     private HashMap<Direction, Tile> adjacentTiles(int row, int col) {

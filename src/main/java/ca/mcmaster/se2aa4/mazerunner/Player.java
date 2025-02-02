@@ -10,7 +10,7 @@ enum Direction {
     WEST
 }
 
-public abstract class Player {
+public abstract class Player implements MazeSolver {
     // Attributes
     protected int position_x;
     protected int position_y;
